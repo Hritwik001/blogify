@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/supabase/supabaseClient';
 import { useRouter, useParams } from 'next/navigation';
 
+interface Blog {
+  title: string;
+  content: string;
+}
+
 export default function EditBlogPage() {
   const router = useRouter();
   const params = useParams();
@@ -24,7 +29,7 @@ export default function EditBlogPage() {
         return;
       }
 
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('blogs')
         .select('*')
         .eq('id', blogId)
@@ -32,15 +37,15 @@ export default function EditBlogPage() {
         .single();
 
       if (data) {
-        setTitle(data.title);
-        setContent(data.content);
+        setTitle((data as Blog).title);
+        setContent((data as Blog).content);
       }
 
       setLoading(false);
     };
 
     checkAuthAndLoad();
-  }, [blogId]);
+  }, [blogId, router]); // ✅ Include router to fix missing dependency warning
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();

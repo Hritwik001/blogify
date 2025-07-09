@@ -3,8 +3,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+interface Blog {
+  id: string;
+  title: string;
+  content: string;
+  created_at: string;
+}
+
 interface BlogCardProps {
-  blog: any;
+  blog: Blog;
   onDelete: (id: string) => void;
 }
 

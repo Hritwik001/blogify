@@ -1,53 +1,51 @@
-'use client'
+'use client';
 
-import { FormEvent, useState } from 'react'
-import { useSupabase } from '@/app/hooks/useSupabase'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { FormEvent, useState } from 'react';
+import { useSupabase } from '@/app/hooks/useSupabase';
+import Link from 'next/link';
 
 export default function SignupPage() {
-  const { supabase } = useSupabase()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
-  const router = useRouter()
+  const { supabase } = useSupabase();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-  const checkIfUserExists = async (email: string) => {
-    const res = await fetch('/api/check-user', {
+  const checkIfUserExists = async (email: string): Promise<{ exists: boolean; confirmed: boolean }> => {
+    const response = await fetch('/api/check-user', {
       method: 'POST',
       body: JSON.stringify({ email }),
       headers: { 'Content-Type': 'application/json' },
-    })
+    });
 
-    return await res.json()
-  }
+    return await response.json();
+  };
 
   const handleSignup = async (e: FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setMessage('')
+    e.preventDefault();
+    setError('');
+    setMessage('');
 
-    const check = await checkIfUserExists(email)
+    const check = await checkIfUserExists(email);
 
     if (check.exists && check.confirmed) {
-      setError('Email is already registered. Please login instead.')
-      return
+      setError('Email is already registered. Please login instead.');
+      return;
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
-    })
+    });
 
-    if (error) {
-      setError(error.message)
+    if (signUpError) {
+      setError(signUpError.message);
     } else {
-      setMessage('Signup successful! Please check your email to confirm.')
-      setEmail('')
-      setPassword('')
+      setMessage('Signup successful! Please check your email to confirm.');
+      setEmail('');
+      setPassword('');
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -89,5 +87,5 @@ export default function SignupPage() {
         </p>
       </form>
     </div>
-  )
+  );
 }

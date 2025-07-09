@@ -5,8 +5,16 @@ import { supabase } from '@/supabase/supabaseClient';
 import { useRouter } from 'next/navigation';
 import BlogCard from '../components/BlogCard';
 
+interface Blog {
+  id: string;
+  title: string;
+  content: string;
+  created_at: string;
+  user_id: string;
+}
+
 export default function DashboardPage() {
-  const [blogs, setBlogs] = useState<any[]>([]);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -30,14 +38,14 @@ export default function DashboardPage() {
       if (error) {
         console.error('Error fetching blogs:', error.message);
       } else {
-        setBlogs(data || []);
+        setBlogs(data as Blog[]);
       }
 
       setLoading(false);
     };
 
     fetchBlogs();
-  }, []);
+  }, [router]); // ✅ FIXED: added router dependency
 
   const handleDelete = async (id: string) => {
     const { error } = await supabase.from('blogs').delete().eq('id', id);
