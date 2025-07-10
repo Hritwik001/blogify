@@ -1,11 +1,11 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
-// Safe fallback in case env vars are missing
-const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-
-const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey)
+// Safe to use only in backend
+const supabaseAdmin = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 export async function POST(req: Request) {
   try {
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       exists: !!user,
       confirmed: user?.email_confirmed_at !== null,
     })
-  } catch (err) {
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message || 'Unknown error' }, { status: 500 })
   }
 }
