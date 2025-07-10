@@ -23,7 +23,11 @@ export async function POST(req: Request) {
       exists: !!user,
       confirmed: user?.email_confirmed_at !== null,
     })
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Unknown error' }, { status: 500 })
+  } catch (e) {
+    if (e instanceof Error) {
+      return NextResponse.json({ error: e.message }, { status: 500 })
+    }
+    return NextResponse.json({ error: 'Unknown error' }, { status: 500 })
   }
 }
+
