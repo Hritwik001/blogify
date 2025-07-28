@@ -45,7 +45,7 @@ export default function EditBlogPage() {
     };
 
     checkAuthAndLoad();
-  }, [blogId, router]); // ✅ Include router to fix missing dependency warning
+  }, [blogId, router]); 
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();

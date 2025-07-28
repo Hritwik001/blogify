@@ -45,7 +45,7 @@ export default function DashboardPage() {
     };
 
     fetchBlogs();
-  }, [router]); // ✅ FIXED: added router dependency
+  }, [router]); 
 
   const handleDelete = async (id: string) => {
     const { error } = await supabase.from('blogs').delete().eq('id', id);

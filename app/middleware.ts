@@ -20,7 +20,7 @@ export async function middleware(req: NextRequest) {
   return res;
 }
 
-// 👇 This ensures the middleware only runs for dashboard routes
+
 export const config = {
   matcher: ['/dashboard/:path*'],
 };

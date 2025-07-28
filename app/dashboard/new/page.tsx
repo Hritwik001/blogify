@@ -21,7 +21,7 @@ export default function NewBlogPage() {
     };
 
     checkAuth();
-  }, [router]); // ✅ FIXED: Added router to dependency array
+  }, [router]); 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
