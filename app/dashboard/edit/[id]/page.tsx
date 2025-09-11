@@ -1,8 +1,7 @@
 // app/dashboard/edit/[id]/page.tsx
 'use client';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // never cache at build-time
+
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
