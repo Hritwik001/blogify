@@ -1,5 +1,5 @@
 // app/api/check-user/route.ts
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type User } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -33,10 +33,10 @@ export async function POST(req: Request) {
     const eq = (a?: string | null, b?: string | null) =>
       (a ?? '').toLowerCase() === (b ?? '').toLowerCase();
 
-    // Use listUsers with pagination (works across SDK versions)
+    // Use listUsers with pagination
     const PER_PAGE = 100;
     let page = 1;
-    let foundUser: any = null;
+    let foundUser: User | null = null;
     let total = 0;
     let totalPages = 1; // will update after first call
 
@@ -70,8 +70,9 @@ export async function POST(req: Request) {
       exists: !!foundUser,
       confirmed: !!foundUser?.email_confirmed_at,
     });
-  } catch (e: any) {
-    return serverError(e?.message ?? 'Unknown error');
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : 'Unknown error';
+    return serverError(message);
   }
 }
 

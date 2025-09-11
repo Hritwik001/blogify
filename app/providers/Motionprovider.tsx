@@ -8,14 +8,12 @@ const motionOn = process.env.NEXT_PUBLIC_MOTION_ON !== 'false';
 
 export function MotionProvider({ children }: PropsWithChildren) {
   if (!motionOn) {
-    // If animations are turned off, just render children directly
     return <>{children}</>;
   }
-
   return (
     <LazyMotion features={domAnimation}>
       <MotionConfig
-        reducedMotion="user" // respects OS "Reduce Motion"
+        reducedMotion="user"
         transition={{ type: 'spring', stiffness: 220, damping: 26, mass: 0.6 }}
       >
         {children}
@@ -24,12 +22,12 @@ export function MotionProvider({ children }: PropsWithChildren) {
   );
 }
 
-// Shorthand motion elements
+// Shorthands
 export const MotionDiv = m.div;
 export const MotionSpan = m.span;
 export const MotionButton = m.button;
 
-// Reusable variants = our motion “design tokens”
+// Reusable motion variants
 export const variants = {
   fadeIn:  { hidden: { opacity: 0 }, show: { opacity: 1 } },
   popIn:   { hidden: { opacity: 0, scale: 0.98, y: 6 }, show: { opacity: 1, scale: 1, y: 0 } },
