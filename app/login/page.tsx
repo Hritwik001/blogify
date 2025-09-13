@@ -21,7 +21,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
-
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -29,7 +28,7 @@ export default function LoginPage() {
   const emailValid = useMemo(() => validateEmail(email), [email]);
   const canSubmit = emailValid && password.length >= 6 && !loading;
 
-  // ✅ FIX: clean up Supabase token hash safely
+  // ✅ FIX: clean Supabase hash
   useEffect(() => {
     if (window.location.hash.includes('access_token')) {
       window.history.replaceState({}, '', '/login');
@@ -72,10 +71,24 @@ export default function LoginPage() {
       variants={variants.fadeIn}
       initial="hidden"
       animate="show"
-      className="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center p-4"
+      className="relative min-h-screen flex items-center justify-center p-4"
     >
-      {/* 🔥 Your full UI stays here — unchanged */}
-      {/* ... everything you pasted originally ... */}
+      <div className="w-full max-w-md">
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label>Email</label>
+            <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
+          <div>
+            <label>Password</label>
+            <input id="password" type={showPw ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} />
+          </div>
+          <MotionButton type="submit" disabled={!canSubmit}>
+            {loading ? 'Logging in…' : 'Log in'}
+          </MotionButton>
+          <p className="text-sm text-center">Don’t have an account? <Link href="/signup">Sign up</Link></p>
+        </form>
+      </div>
     </MotionDiv>
   );
 }
