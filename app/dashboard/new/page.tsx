@@ -1,20 +1,19 @@
 // app/dashboard/new/page.tsx
 'use client'
 
+// keep this: it's fine on a client page and tells Next not to prerender
 export const dynamic = 'force-dynamic'
-export const revalidate = 0
-export const fetchCache = 'force-no-store'
 
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import PostForm from '@/app/components/PostForm'
 import { MotionDiv, variants } from '@/app/providers/Motionprovider'
 
-// ⛔️ REMOVE any `useSupabase` import (it may pull Supabase on the server)
+// ⛔ remove: useSupabase import (it can drag Supabase into server path)
 // import { useSupabase } from '@/supabase/useSupabase'
 
 export default function NewPostPage() {
-  // ✅ Create the Supabase client lazily in the browser only
+  // ✅ create Supabase only in the browser
   const supabase = useMemo(() => {
     const { createClient } = require('@supabase/supabase-js')
     return createClient(
@@ -43,7 +42,7 @@ export default function NewPostPage() {
       router.push('/dashboard')
     } catch (e) {
       console.error(e)
-      // (optional) show a toast here
+      // TODO: show toast if you want
     } finally {
       setSubmitting(false)
     }
