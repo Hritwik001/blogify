@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MotionDiv, MotionButton, variants } from '@/app/providers/Motionprovider';
 
+//this is Blog card component
 interface Blog {
   id: string;
   title: string;
